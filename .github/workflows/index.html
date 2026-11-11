@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Historia zapasów krwi</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+  select { padding: .35rem; margin: 0 .5rem .5rem 0; font-size: 1rem; }
+  #info { color: #666; font-size: .9rem; }
+</style>
+</head>
+<body>
+<h1>Historia zapasów krwi</h1>
+<select id="centrum"></select>
+<select id="typ"><option value="krew">Krew pełna</option><option value="plytki">Płytki</option></select>
+<select id="grupa"></select>
+<canvas id="wykres"></canvas>
+<p id="info"></p>
+<script>
+const NAZWY = {10: "bardzo niski", 30: "niski", 50: "średni", 75: "wystarczający", 100: "wysoki"};
+const GRUPY = ["0-","0+","A-","A+","B-","B+","AB-","AB+"];
+let dane = [], chart;
+
+fetch("data.csv?" + Date.now()).then(r => r.text()).then(t => {
+  const [nag, ...wiersze] = t.trim().split("\n");
+  const k = nag.split(",");
+  dane = wiersze.map(w => Object.fromEntries(w.split(",").map((v, i) => [k[i], v])));
+  const centra = [...new Set(dane.map(d => d.centrum))].sort((a, b) => a.localeCompare(b, "pl"));
+  centrum.innerHTML = centra.map(c => `<option>${c}</option>`).join("");
+  grupa.innerHTML = GRUPY.map(g => `<option>${g}</option>`).join("");
+  const h = new URLSearchParams(location.hash.slice(1));   // link do konkretnego widoku, np. #c=Kraków&g=0-
+  if (h.get("c")) centrum.value = h.get("c");
+  if (h.get("t")) typ.value = h.get("t");
+  if (h.get("g")) grupa.value = h.get("g");
+  [centrum, typ, grupa].forEach(s => s.onchange = rysuj);
+  rysuj();
+});
+
+function rysuj() {
+  location.hash = new URLSearchParams({c: centrum.value, t: typ.value, g: grupa.value});
+  const sel = dane.filter(d => d.centrum === centrum.value && d.typ === typ.value && d.grupa === grupa.value);
+  const pts = sel.map(d => ({x: d.czas, y: d.wartosc === "" ? null : +d.wartosc, poziom: d.poziom, procent: d.procent}));
+  if (pts.length) pts.push({...pts.at(-1), x: new Date().toISOString()}); // przeciągnij do "teraz"
+  const procentowe = sel.some(d => d.procent !== "");
+  chart?.destroy();
+  chart = new Chart(wykres, {
+    type: "line",
+    data: { datasets: [{
+      label: `${centrum.value} – ${grupa.value}`,
+      data: pts, stepped: true, fill: true, pointRadius: 2,
+      borderColor: "#c0392b", backgroundColor: "rgba(192,57,43,.15)"
+    }]},
+    options: {
+      scales: {
+        x: { type: "time", time: { tooltipFormat: "dd.MM.yyyy HH:mm" } },
+        y: { min: 0, max: 105,
+             afterBuildTicks: ax => { if (!procentowe) ax.ticks = [10,30,50,75,100].map(v => ({value: v})); },
+             ticks: { callback: v => procentowe ? v + "%" : (NAZWY[v] || "") } }
+      },
+      plugins: { tooltip: { callbacks: { label: c => {
+        const p = c.raw;
+        return p.procent ? `${p.procent}%` : (p.poziom === "plasma" ? "tylko osocze"
+             : p.poziom === "stopped" ? "pobór wstrzymany" : (NAZWY[p.y] || p.poziom));
+      }}}}
+    }
+  });
+  const przerwy = sel.filter(d => d.wartosc === "").length;
+  info.textContent = sel.length
+    ? `Zmian stanu: ${sel.length}. ${przerwy ? `Przerwy w linii = „tylko osocze”/„pobór wstrzymany”/brak danych (${przerwy}).` : ""}`
+    : "Brak danych dla tego wyboru (np. to centrum nie publikuje stanów płytek).";
+}
+</script>
+</body>
+</html>
