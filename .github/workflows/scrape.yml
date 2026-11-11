@@ -1,7 +1,7 @@
 name: zapisz-stany
 on:
   schedule:
-    - cron: "17 * * * *"   # co godzinę (strona aktualizuje się co godzinę)
+    - cron: "40 * * * *"   # co godzinę (strona aktualizuje się co godzinę)
   workflow_dispatch:
 permissions:
   contents: write
