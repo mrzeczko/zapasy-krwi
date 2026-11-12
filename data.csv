@@ -229,3 +229,16 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-12T10:10+01:00,Radom,krew,B+,high,,100
 2026-11-12T10:10+01:00,Radom,krew,AB-,critical,,10
 2026-11-12T10:10+01:00,Słupsk,krew,A+,medium,,50
+2026-11-12T11:10+01:00,Poznań,krew,0-,critical,,10
+2026-11-12T11:10+01:00,Poznań,krew,A-,critical,,10
+2026-11-12T11:10+01:00,Poznań,krew,A+,medium,,50
+2026-11-12T11:10+01:00,Poznań,krew,B-,critical,,10
+2026-11-12T11:10+01:00,Poznań,krew,B+,medium,,50
+2026-11-12T11:10+01:00,Racibórz,krew,0-,medium,,50
+2026-11-12T11:10+01:00,Racibórz,krew,0+,medium,,50
+2026-11-12T11:10+01:00,Racibórz,krew,A+,medium,,50
+2026-11-12T11:10+01:00,Racibórz,krew,AB-,low,,30
+2026-11-12T11:10+01:00,Szczecin,krew,0+,medium,,50
+2026-11-12T11:10+01:00,Szczecin,krew,A-,low,,30
+2026-11-12T11:10+01:00,Szczecin,krew,A+,medium,,50
+2026-11-12T11:10+01:00,Szczecin,krew,B-,low,,30
