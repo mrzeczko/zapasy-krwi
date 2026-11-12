@@ -25,7 +25,7 @@ const GRUPY = ["0-","0+","A-","A+","B-","B+","AB-","AB+"];
 let dane = [], chart;
 
 fetch("data.csv?" + Date.now()).then(r => r.text()).then(t => {
-  const [nag, ...wiersze] = t.trim().split("\n");
+  const [nag, ...wiersze] = t.trim().split(/\r?\n/);
   const k = nag.split(",");
   dane = wiersze.map(w => Object.fromEntries(w.split(",").map((v, i) => [k[i], v])));
   const centra = [...new Set(dane.map(d => d.centrum))].sort((a, b) => a.localeCompare(b, "pl"));
