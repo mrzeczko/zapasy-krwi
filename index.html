@@ -7,70 +7,278 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
-  select { padding: .35rem; margin: 0 .5rem .5rem 0; font-size: 1rem; }
-  #info { color: #666; font-size: .9rem; }
+  body { font-family: system-ui, sans-serif; max-width: 1200px; margin: 1.5rem auto; padding: 0 1rem; color: #222; }
+  h1 { margin: .2rem 0 1rem; }
+  nav { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+  nav button { padding: .45rem .8rem; border: 1px solid #ccc; background: #f6f6f6; border-radius: 6px; cursor: pointer; font-size: .95rem; }
+  nav button.on { background: #c0392b; color: #fff; border-color: #c0392b; }
+  .ctrl { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; margin-bottom: .6rem; }
+  .ctrl label { font-size: .9rem; color: #555; }
+  select { padding: .3rem; font-size: .95rem; margin-left: .3rem; }
+  .hidden { display: none !important; }
+  .chartbox { position: relative; height: 420px; margin-bottom: 1.2rem; }
+  .scroll { overflow-x: auto; }
+  table.heat { border-collapse: collapse; font-size: .8rem; }
+  table.heat th, table.heat td { border: 1px solid #fff; padding: 0; text-align: center; }
+  table.heat th.row { text-align: left; padding: 2px 8px 2px 0; white-space: nowrap; font-weight: 500; cursor: pointer; }
+  table.heat th.row:hover { text-decoration: underline; }
+  table.heat td.c { width: 14px; min-width: 14px; height: 20px; }
+  table.heat th.col { font-weight: normal; color: #777; font-size: .7rem; writing-mode: vertical-rl; transform: rotate(180deg); height: 48px; padding: 2px 0; }
+  table.heat .stat { padding: 0 8px; white-space: nowrap; color: #444; font-weight: normal; }
+  table.now { border-collapse: collapse; font-size: .85rem; }
+  table.now th, table.now td { border: 2px solid #fff; padding: 6px 8px; text-align: center; }
+  table.now td { cursor: pointer; min-width: 70px; }
+  table.now td:hover { outline: 2px solid #333; }
+  table.now th.row { text-align: left; cursor: pointer; white-space: nowrap; }
+  table.now th.row:hover { text-decoration: underline; }
+  .legend { display: flex; flex-wrap: wrap; gap: .8rem; font-size: .8rem; margin: .4rem 0 1rem; color: #444; }
+  .legend span { display: inline-flex; align-items: center; gap: .3rem; }
+  .legend i { display: inline-block; width: 14px; height: 14px; border-radius: 3px; }
+  #info { color: #666; font-size: .85rem; }
 </style>
 </head>
 <body>
 <h1>Historia zapasów krwi</h1>
-<select id="centrum"></select>
-<select id="typ"><option value="krew">Krew pełna</option><option value="plytki">Płytki</option></select>
-<select id="grupa"></select>
-<canvas id="wykres"></canvas>
-<p id="info"></p>
-<script>
-const NAZWY = {10: "bardzo niski", 30: "niski", 50: "średni", 75: "wystarczający", 100: "wysoki"};
-const GRUPY = ["0-","0+","A-","A+","B-","B+","AB-","AB+"];
-let dane = [], chart;
 
-fetch("data.csv?" + Date.now()).then(r => r.text()).then(t => {
-  const [nag, ...wiersze] = t.trim().split(/\r?\n/);
+<nav id="tabs">
+  <button data-v="teraz">Aktualny stan</button>
+  <button data-v="jedna">Grupa w centrum</button>
+  <button data-v="centrum">Wszystkie grupy w centrum</button>
+  <button data-v="grupa">Grupa we wszystkich centrach</button>
+</nav>
+
+<div class="ctrl">
+  <label>Typ<select id="typ"><option value="krew">Krew pełna</option><option value="plytki">Płytki</option></select></label>
+  <label id="lCentrum">Centrum<select id="centrum"></select></label>
+  <label id="lGrupa">Grupa<select id="grupa"></select></label>
+  <label id="lOkres">Okres<select id="okres">
+    <option value="7">7 dni</option><option value="30" selected>30 dni</option>
+    <option value="90">90 dni</option><option value="0">całość</option>
+  </select></label>
+  <label id="lKrok">Krok mapy<select id="krok">
+    <option value="6">6 godzin</option><option value="24" selected>1 dzień</option>
+  </select></label>
+</div>
+
+<div id="legenda" class="legend"></div>
+<div id="wykresBox" class="chartbox"><canvas id="wykres"></canvas></div>
+<div id="mapa" class="scroll"></div>
+<p id="info"></p>
+
+<script>
+const GRUPY = ["0-","0+","A-","A+","B-","B+","AB-","AB+"];
+const NAZWY = {10: "bardzo niski", 30: "niski", 50: "średni", 75: "wystarczający", 100: "wysoki"};
+const SPECJALNE = {plasma: "tylko osocze", stopped: "pobór wstrzymany", unknown: "brak rozpoznania"};
+const KOLORY_GRUP = ["#c0392b","#e67e22","#d4ac0d","#27ae60","#16a085","#2980b9","#8e44ad","#566573"];
+const LEGENDA = [
+  ["#a50f15","bardzo niski"], ["#ef6548","niski"], ["#fdd14a","średni"], ["#a1d99b","wystarczający"],
+  ["#31a354","wysoki"], ["#9b8fd6","tylko osocze"], ["#95a5a6","pobór wstrzymany"], ["#e3e3e3","brak danych"]
+];
+
+const $ = id => document.getElementById(id);
+const klucz = (c, t, g) => `${c}|${t}|${g}`;
+const pad = n => String(n).padStart(2, "0");
+const fmtDzien = d => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}`;
+const fmtGodz = d => `${fmtDzien(d)} ${pad(d.getHours())}:00`;
+
+let serie = {};          // "centrum|typ|grupa" -> [{t, v, poziom, procent}] posortowane po czasie
+let pierwszyOdczyt = new Date();
+let widok = "teraz";
+let chart = null;
+
+// ---------- dane ----------
+fetch("data.csv?" + Date.now()).then(r => r.text()).then(tekst => {
+  const [nag, ...wiersze] = tekst.trim().split(/\r?\n/);
   const k = nag.split(",");
-  dane = wiersze.map(w => Object.fromEntries(w.split(",").map((v, i) => [k[i], v])));
-  const centra = [...new Set(dane.map(d => d.centrum))].sort((a, b) => a.localeCompare(b, "pl"));
-  centrum.innerHTML = centra.map(c => `<option>${c}</option>`).join("");
-  grupa.innerHTML = GRUPY.map(g => `<option>${g}</option>`).join("");
-  const h = new URLSearchParams(location.hash.slice(1));   // link do konkretnego widoku, np. #c=Kraków&g=0-
-  if (h.get("c")) centrum.value = h.get("c");
-  if (h.get("t")) typ.value = h.get("t");
-  if (h.get("g")) grupa.value = h.get("g");
-  [centrum, typ, grupa].forEach(s => s.onchange = rysuj);
-  rysuj();
+  for (const w of wiersze) {
+    const d = Object.fromEntries(w.split(",").map((v, i) => [k[i], v]));
+    (serie[klucz(d.centrum, d.typ, d.grupa)] ??= []).push({
+      t: new Date(d.czas),
+      v: d.wartosc === "" ? null : +d.wartosc,
+      poziom: d.poziom, procent: d.procent
+    });
+  }
+  for (const s of Object.values(serie)) s.sort((a, b) => a.t - b.t);
+  pierwszyOdczyt = new Date(Math.min(...Object.values(serie).map(s => +s[0].t)));
+  init();
 });
 
-function rysuj() {
-  location.hash = new URLSearchParams({c: centrum.value, t: typ.value, g: grupa.value});
-  const sel = dane.filter(d => d.centrum === centrum.value && d.typ === typ.value && d.grupa === grupa.value);
-  const pts = sel.map(d => ({x: d.czas, y: d.wartosc === "" ? null : +d.wartosc, poziom: d.poziom, procent: d.procent}));
-  if (pts.length) pts.push({...pts.at(-1), x: new Date().toISOString()}); // przeciągnij do "teraz"
-  const procentowe = sel.some(d => d.procent !== "");
+// stan obowiązujący w chwili t = ostatni zapis nie późniejszy niż t
+function stanW(s, t) {
+  if (!s) return null;
+  let wynik = null;
+  for (const p of s) { if (p.t <= t) wynik = p; else break; }
+  return wynik;
+}
+
+function centra(typ) {
+  return [...new Set(Object.keys(serie)
+      .filter(k => k.split("|")[1] === typ)
+      .map(k => k.split("|")[0]))]
+    .sort((a, b) => a.localeCompare(b, "pl"));
+}
+
+function zakres() {
+  const teraz = new Date();
+  const dni = +$("okres").value;
+  const od = dni ? new Date(Math.max(+pierwszyOdczyt, +teraz - dni * 864e5)) : pierwszyOdczyt;
+  return [od, teraz];
+}
+
+function kolor(p) {
+  if (!p) return "#e3e3e3";
+  if (p.v === null) return p.poziom === "plasma" ? "#9b8fd6" : p.poziom === "stopped" ? "#95a5a6" : "#e3e3e3";
+  const v = p.v;
+  return v <= 15 ? "#a50f15" : v <= 35 ? "#ef6548" : v <= 55 ? "#fdd14a" : v <= 80 ? "#a1d99b" : "#31a354";
+}
+
+function opis(p) {
+  if (!p) return "brak danych";
+  if (p.procent) return p.procent + "%";
+  return SPECJALNE[p.poziom] || NAZWY[p.v] || p.poziom;
+}
+
+// ---------- wykres liniowy (1 lub wiele serii) ----------
+function rysujLinie(lista) {
+  const [od, teraz] = zakres();
+  const procentowe = lista.some(x => x.s?.some(p => p.procent));
+  const datasets = lista.map(({label, s, color}) => {
+    s = s || [];
+    const przed = stanW(s, od);
+    const punkty = [przed ? {...przed, t: od} : null, ...s.filter(p => p.t > od)].filter(Boolean)
+      .map(p => ({x: p.t, y: p.v, p}));
+    if (punkty.length) punkty.push({...punkty.at(-1), x: teraz});
+    return {label, data: punkty, stepped: true, spanGaps: false, borderColor: color,
+            backgroundColor: color, borderWidth: 2, pointRadius: 0, pointHitRadius: 6};
+  });
   chart?.destroy();
-  chart = new Chart(wykres, {
+  chart = new Chart($("wykres"), {
     type: "line",
-    data: { datasets: [{
-      label: `${centrum.value} – ${grupa.value}`,
-      data: pts, stepped: true, fill: true, pointRadius: 2,
-      borderColor: "#c0392b", backgroundColor: "rgba(192,57,43,.15)"
-    }]},
+    data: {datasets},
     options: {
+      maintainAspectRatio: false,
+      interaction: {mode: "nearest", intersect: false},
       scales: {
-        x: { type: "time", time: { tooltipFormat: "dd.MM.yyyy HH:mm" } },
-        y: { min: 0, max: 105,
-             afterBuildTicks: ax => { if (!procentowe) ax.ticks = [10,30,50,75,100].map(v => ({value: v})); },
-             ticks: { callback: v => procentowe ? v + "%" : (NAZWY[v] || "") } }
+        x: {type: "time", min: od, max: teraz, time: {tooltipFormat: "dd.MM.yyyy HH:mm"}},
+        y: {min: 0, max: 105,
+            afterBuildTicks: ax => { if (!procentowe) ax.ticks = [10,30,50,75,100].map(v => ({value: v})); },
+            ticks: {callback: v => procentowe ? v + "%" : (NAZWY[v] || "")}}
       },
-      plugins: { tooltip: { callbacks: { label: c => {
-        const p = c.raw;
-        return p.procent ? `${p.procent}%` : (p.poziom === "plasma" ? "tylko osocze"
-             : p.poziom === "stopped" ? "pobór wstrzymany" : (NAZWY[p.y] || p.poziom));
-      }}}}
+      plugins: {
+        legend: {display: lista.length > 1},
+        tooltip: {callbacks: {label: c => `${c.dataset.label}: ${opis(c.raw.p)}`}}
+      }
     }
   });
-  const przerwy = sel.filter(d => d.wartosc === "").length;
-  info.textContent = sel.length
-    ? `Zmian stanu: ${sel.length}. ${przerwy ? `Przerwy w linii = „tylko osocze”/„pobór wstrzymany”/brak danych (${przerwy}).` : ""}`
-    : "Brak danych dla tego wyboru (np. to centrum nie publikuje stanów płytek).";
+}
+
+// ---------- mapa cieplna (wiersze × czas) ----------
+function rysujMape(wiersze, klikWiersz) {
+  const [od, teraz] = zakres();
+  const krokH = +$("krok").value, krok = krokH * 36e5;
+  const start = new Date(od); start.setHours(0, 0, 0, 0);
+  const kubelki = [];
+  for (let t = +start; t < +teraz; t += krok)
+    kubelki.push({start: new Date(t), koniec: new Date(Math.min(t + krok - 1, +teraz))});
+
+  let html = `<table class="heat"><tr><th></th>` +
+    kubelki.map(k => `<th class="col">${k.start.getHours() < krokH ? fmtDzien(k.start) : ""}</th>`).join("") +
+    `<th class="stat" title="Procent wybranego okresu, w którym stan był niski lub bardzo niski">% niski</th></tr>`;
+
+  for (const w of wiersze) {
+    const stany = kubelki.map(k => stanW(w.s, k.koniec));
+    const znane = stany.filter(p => p && p.v !== null);
+    const niski = znane.length ? Math.round(100 * znane.filter(p => p.v <= 35).length / znane.length) + "%" : "–";
+    html += `<tr><th class="row" data-k="${w.label}">${w.label}</th>` +
+      stany.map((p, i) => `<td class="c" style="background:${kolor(p)}" title="${w.label} · ${fmtGodz(kubelki[i].start)}: ${opis(p)}"></td>`).join("") +
+      `<td class="stat">${niski}</td></tr>`;
+  }
+  $("mapa").innerHTML = html + "</table>";
+  $("mapa").querySelectorAll("th.row").forEach(th => th.onclick = () => klikWiersz(th.dataset.k));
+}
+
+// ---------- tabela aktualnego stanu ----------
+function rysujTeraz() {
+  const typ = $("typ").value, teraz = new Date(), dobaTemu = new Date(+teraz - 864e5);
+  let html = `<table class="now"><tr><th></th>${GRUPY.map(g => `<th>${g}</th>`).join("")}</tr>`;
+  for (const c of centra(typ)) {
+    html += `<tr><th class="row" data-c="${c}">${c}</th>`;
+    for (const g of GRUPY) {
+      const s = serie[klucz(c, typ, g)];
+      const p = stanW(s, teraz), q = stanW(s, dobaTemu);
+      const strz = p && q && p.v !== null && q.v !== null && p.v !== q.v ? (p.v > q.v ? " ↑" : " ↓") : "";
+      const tekst = p && p.v !== null && p.v <= 15 ? "#fff" : "#222";
+      html += `<td data-c="${c}" data-g="${g}" style="background:${kolor(p)};color:${tekst}">${opis(p)}${strz}</td>`;
+    }
+    html += "</tr>";
+  }
+  $("mapa").innerHTML = html + "</table>";
+  $("mapa").querySelectorAll("td[data-g]").forEach(td => td.onclick = () => przejdz("jedna", td.dataset.c, td.dataset.g));
+  $("mapa").querySelectorAll("th.row").forEach(th => th.onclick = () => przejdz("centrum", th.dataset.c));
+}
+
+// ---------- sterowanie ----------
+const pokaz = (id, tak) => $(id).classList.toggle("hidden", !tak);
+const info = t => $("info").textContent = t;
+
+function przejdz(v, c, g) {
+  widok = v;
+  if (c) $("centrum").value = c;
+  if (g) $("grupa").value = g;
+  rysuj();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function rysuj() {
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.v === widok));
+  const typ = $("typ").value;
+  const lista = centra(typ), wybrane = $("centrum").value;
+  $("centrum").innerHTML = lista.map(c => `<option>${c}</option>`).join("");
+  if (lista.includes(wybrane)) $("centrum").value = wybrane;
+  const c = $("centrum").value, g = $("grupa").value;
+
+  pokaz("lCentrum", widok === "jedna" || widok === "centrum");
+  pokaz("lGrupa", widok === "jedna" || widok === "grupa");
+  pokaz("lOkres", widok !== "teraz");
+  pokaz("lKrok", widok === "centrum" || widok === "grupa");
+  pokaz("wykresBox", widok !== "teraz");
+  $("mapa").innerHTML = "";
+  history.replaceState(null, "", "#" + new URLSearchParams({v: widok, t: typ, c, g, o: $("okres").value, k: $("krok").value}));
+
+  if (widok === "teraz") {
+    chart?.destroy(); chart = null;
+    rysujTeraz();
+    info("Kliknij komórkę, by zobaczyć historię tej grupy, albo nazwę centrum, by zobaczyć wszystkie jego grupy. Strzałka oznacza zmianę względem stanu sprzed 24 godzin.");
+  } else if (widok === "jedna") {
+    rysujLinie([{label: `${c} – ${g}`, s: serie[klucz(c, typ, g)], color: "#c0392b"}]);
+    info(serie[klucz(c, typ, g)] ? "" : "Brak danych dla tego wyboru (np. centrum nie publikuje stanów płytek).");
+  } else if (widok === "centrum") {
+    rysujLinie(GRUPY.map((gr, i) => ({label: gr, s: serie[klucz(c, typ, gr)], color: KOLORY_GRUP[i]})));
+    rysujMape(GRUPY.map(gr => ({label: gr, s: serie[klucz(c, typ, gr)]})), gr => przejdz("jedna", c, gr));
+    info("Linie mogą się nakładać, więc mapa pod wykresem jest czytelniejsza. Kliknij nazwę w legendzie, by ukryć lub pokazać serię, a grupę w mapie, by zobaczyć jej osobny wykres.");
+  } else {
+    const lc = centra(typ);
+    rysujLinie(lc.map((cc, i) => ({label: cc, s: serie[klucz(cc, typ, g)], color: `hsl(${Math.round(i * 360 / lc.length)},65%,42%)`})));
+    rysujMape(lc.map(cc => ({label: cc, s: serie[klucz(cc, typ, g)]})), cc => przejdz("jedna", cc, g));
+    info("Uwaga: część centrów podaje procent, a część poziomy opisowe. Obie skale są sprowadzone do wspólnej, umownej skali, więc porównania między centrami traktuj orientacyjnie.");
+  }
+}
+
+function init() {
+  $("grupa").innerHTML = GRUPY.map(g => `<option>${g}</option>`).join("");
+  $("legenda").innerHTML = LEGENDA.map(([c, n]) => `<span><i style="background:${c}"></i>${n}</span>`).join("") +
+    `<span style="color:#888">(dla centrów podających procent: ≤15%, ≤35%, ≤55%, ≤80%, >80%)</span>`;
+
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.get("v")) widok = h.get("v");
+  if (h.get("t")) $("typ").value = h.get("t");
+  $("centrum").innerHTML = centra($("typ").value).map(c => `<option>${c}</option>`).join("");
+  for (const [p, id] of [["c","centrum"], ["g","grupa"], ["o","okres"], ["k","krok"]])
+    if (h.get(p)) $(id).value = h.get(p);
+
+  document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { widok = b.dataset.v; rysuj(); });
+  ["typ", "centrum", "grupa", "okres", "krok"].forEach(id => $(id).onchange = rysuj);
+  rysuj();
 }
 </script>
 </body>
