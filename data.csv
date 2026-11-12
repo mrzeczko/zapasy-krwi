@@ -204,3 +204,9 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-12T05:10+01:00,Warszawa,plytki,A-,,5,5
 2026-11-12T05:10+01:00,Warszawa,plytki,A+,,20,20
 2026-11-12T05:10+01:00,Warszawa,plytki,AB+,,5,5
+2026-11-12T08:10+01:00,Lublin,krew,0-,medium,,50
+2026-11-12T08:10+01:00,Lublin,krew,0+,low,,30
+2026-11-12T08:10+01:00,Lublin,krew,B-,high,,100
+2026-11-12T08:10+01:00,Łódź,krew,B-,low,,30
+2026-11-12T08:10+01:00,Rzeszów,krew,A+,low,,30
+2026-11-12T08:10+01:00,Rzeszów,krew,B-,medium,,50
