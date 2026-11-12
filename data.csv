@@ -242,3 +242,11 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-12T11:10+01:00,Szczecin,krew,A-,low,,30
 2026-11-12T11:10+01:00,Szczecin,krew,A+,medium,,50
 2026-11-12T11:10+01:00,Szczecin,krew,B-,low,,30
+2026-11-12T12:10+01:00,Warszawa,krew,0-,,50,50
+2026-11-12T12:10+01:00,Warszawa,krew,A+,,50,50
+2026-11-12T12:10+01:00,Warszawa,krew,AB-,,50,50
+2026-11-12T12:10+01:00,Warszawa,plytki,0-,,20,20
+2026-11-12T12:10+01:00,Warszawa,plytki,A-,,20,20
+2026-11-12T12:10+01:00,Warszawa,plytki,A+,,50,50
+2026-11-12T12:10+01:00,Warszawa,plytki,AB-,,20,20
+2026-11-12T12:10+01:00,Warszawa,plytki,AB+,,20,20
