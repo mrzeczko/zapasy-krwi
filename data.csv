@@ -277,3 +277,9 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-13T10:10+01:00,Racibórz,krew,B-,low,,30
 2026-11-13T10:10+01:00,Racibórz,krew,B+,medium,,50
 2026-11-13T10:10+01:00,Szczecin,krew,0+,low,,30
+2026-11-13T11:10+01:00,Poznań,krew,0-,critical,,10
+2026-11-13T11:10+01:00,Poznań,krew,0+,medium,,50
+2026-11-13T11:10+01:00,Poznań,krew,A-,low,,30
+2026-11-13T11:10+01:00,Poznań,krew,A+,low,,30
+2026-11-13T11:10+01:00,Poznań,krew,B-,critical,,10
+2026-11-13T11:10+01:00,Poznań,krew,B+,medium,,50
