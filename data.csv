@@ -283,3 +283,13 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-13T11:10+01:00,Poznań,krew,A+,low,,30
 2026-11-13T11:10+01:00,Poznań,krew,B-,critical,,10
 2026-11-13T11:10+01:00,Poznań,krew,B+,medium,,50
+2026-11-13T12:10+01:00,Warszawa,krew,0-,,50,50
+2026-11-13T12:10+01:00,Warszawa,krew,A+,,100,100
+2026-11-13T12:10+01:00,Warszawa,plytki,0-,,100,100
+2026-11-13T12:10+01:00,Warszawa,plytki,0+,,100,100
+2026-11-13T12:10+01:00,Warszawa,plytki,A-,,100,100
+2026-11-13T12:10+01:00,Warszawa,plytki,A+,,100,100
+2026-11-13T12:10+01:00,Warszawa,plytki,B-,,50,50
+2026-11-13T12:10+01:00,Warszawa,plytki,B+,,100,100
+2026-11-13T12:10+01:00,Warszawa,plytki,AB-,,50,50
+2026-11-13T12:10+01:00,Warszawa,plytki,AB+,,50,50
