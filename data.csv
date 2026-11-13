@@ -293,3 +293,12 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-13T12:10+01:00,Warszawa,plytki,B+,,100,100
 2026-11-13T12:10+01:00,Warszawa,plytki,AB-,,50,50
 2026-11-13T12:10+01:00,Warszawa,plytki,AB+,,50,50
+2026-11-13T13:10+01:00,Bydgoszcz,krew,B-,high,,100
+2026-11-13T13:10+01:00,Bydgoszcz,krew,B+,high,,100
+2026-11-13T13:10+01:00,Bydgoszcz,krew,AB-,high,,100
+2026-11-13T13:10+01:00,Racibórz,krew,A-,low,,30
+2026-11-13T13:10+01:00,Radom,krew,0-,critical,,10
+2026-11-13T13:10+01:00,Radom,krew,B-,critical,,10
+2026-11-13T13:10+01:00,Radom,krew,B+,medium,,50
+2026-11-13T13:10+01:00,Słupsk,krew,A+,sufficient,,75
+2026-11-13T13:10+01:00,Słupsk,krew,B+,sufficient,,75
