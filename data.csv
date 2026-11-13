@@ -262,3 +262,7 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-13T05:10+01:00,Warszawa,plytki,0-,,5,5
 2026-11-13T05:10+01:00,Warszawa,plytki,A+,,20,20
 2026-11-13T05:10+01:00,Warszawa,plytki,AB-,,5,5
+2026-11-13T08:10+01:00,Lublin,krew,A-,low,,30
+2026-11-13T08:10+01:00,Rzeszów,krew,A+,sufficient,,75
+2026-11-13T08:10+01:00,Rzeszów,krew,B-,sufficient,,75
+2026-11-13T08:10+01:00,Rzeszów,krew,AB-,high,,100
