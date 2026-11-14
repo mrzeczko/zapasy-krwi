@@ -320,3 +320,7 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-14T05:10+01:00,Warszawa,plytki,AB-,,20,20
 2026-11-14T05:10+01:00,Warszawa,plytki,AB+,,20,20
 2026-11-14T10:10+01:00,Racibórz,krew,0-,low,,30
+2026-11-14T12:10+01:00,Warszawa,krew,AB-,,100,100
+2026-11-14T12:10+01:00,Warszawa,plytki,0-,,50,50
+2026-11-14T12:10+01:00,Warszawa,plytki,A+,,50,50
+2026-11-14T12:10+01:00,Warszawa,plytki,AB+,,5,5
