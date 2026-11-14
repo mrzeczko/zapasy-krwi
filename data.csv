@@ -315,3 +315,7 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-13T16:10+01:00,Racibórz,krew,A-,medium,,50
 2026-11-13T16:10+01:00,Racibórz,krew,B-,low,,30
 2026-11-13T16:10+01:00,Racibórz,krew,B+,medium,,50
+2026-11-14T05:10+01:00,Warszawa,plytki,A-,,50,50
+2026-11-14T05:10+01:00,Warszawa,plytki,B+,,50,50
+2026-11-14T05:10+01:00,Warszawa,plytki,AB-,,20,20
+2026-11-14T05:10+01:00,Warszawa,plytki,AB+,,20,20
