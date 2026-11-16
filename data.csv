@@ -363,3 +363,8 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-16T10:10+01:00,Szczecin,krew,0+,critical,,10
 2026-11-16T10:10+01:00,Szczecin,krew,A+,low,,30
 2026-11-16T10:10+01:00,Szczecin,krew,B-,critical,,10
+2026-11-16T11:09+01:00,Poznań,krew,0-,critical,,10
+2026-11-16T11:09+01:00,Poznań,krew,A-,medium,,50
+2026-11-16T11:09+01:00,Poznań,krew,A+,medium,,50
+2026-11-16T11:09+01:00,Poznań,krew,B-,critical,,10
+2026-11-16T11:09+01:00,Poznań,krew,AB-,low,,30
