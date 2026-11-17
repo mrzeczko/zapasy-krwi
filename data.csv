@@ -437,3 +437,8 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-17T14:10+01:00,Katowice,krew,B-,,42,42
 2026-11-17T14:10+01:00,Katowice,krew,B+,,95,95
 2026-11-17T14:10+01:00,Katowice,krew,AB-,,28,28
+2026-11-17T14:50+01:00,Bydgoszcz,krew,0+,critical,,10
+2026-11-17T14:50+01:00,Racibórz,krew,0+,low,,30
+2026-11-17T14:50+01:00,Racibórz,krew,A+,medium,,50
+2026-11-17T14:50+01:00,Racibórz,krew,B-,critical,,10
+2026-11-17T14:50+01:00,Racibórz,krew,AB-,critical,,10
