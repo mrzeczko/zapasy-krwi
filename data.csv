@@ -406,3 +406,9 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-17T09:10+01:00,Rzeszów,krew,A+,low,,30
 2026-11-17T09:10+01:00,Rzeszów,krew,B-,low,,30
 2026-11-17T09:10+01:00,Rzeszów,krew,AB-,sufficient,,75
+2026-11-17T10:10+01:00,Słupsk,krew,0+,medium,,50
+2026-11-17T10:10+01:00,Słupsk,krew,A-,medium,,50
+2026-11-17T10:10+01:00,Słupsk,krew,A+,medium,,50
+2026-11-17T10:10+01:00,Słupsk,krew,B-,medium,,50
+2026-11-17T10:10+01:00,Słupsk,krew,B+,medium,,50
+2026-11-17T10:10+01:00,Słupsk,krew,AB-,low,,30
