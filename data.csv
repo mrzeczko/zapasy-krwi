@@ -431,3 +431,9 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-17T12:10+01:00,Warszawa,plytki,AB-,,20,20
 2026-11-17T13:10+01:00,Szczecin,krew,A-,low,,30
 2026-11-17T13:10+01:00,Szczecin,krew,A+,medium,,50
+2026-11-17T14:10+01:00,Katowice,krew,0-,,23,23
+2026-11-17T14:10+01:00,Katowice,krew,A-,,34,34
+2026-11-17T14:10+01:00,Katowice,krew,A+,,96,96
+2026-11-17T14:10+01:00,Katowice,krew,B-,,42,42
+2026-11-17T14:10+01:00,Katowice,krew,B+,,95,95
+2026-11-17T14:10+01:00,Katowice,krew,AB-,,28,28
