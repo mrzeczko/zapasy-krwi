@@ -486,3 +486,10 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-18T14:10+01:00,Kielce,krew,AB+,sufficient,,75
 2026-11-19T06:10+01:00,Warszawa,krew,AB-,,50,50
 2026-11-19T06:10+01:00,Warszawa,plytki,B+,,50,50
+2026-11-19T09:10+01:00,Kielce,krew,0-,critical,,10
+2026-11-19T09:10+01:00,Kielce,krew,0+,critical,,10
+2026-11-19T09:10+01:00,Kielce,krew,A-,critical,,10
+2026-11-19T09:10+01:00,Kielce,krew,A+,critical,,10
+2026-11-19T09:10+01:00,Kielce,krew,AB+,medium,,50
+2026-11-19T09:10+01:00,Łódź,krew,B+,medium,,50
+2026-11-19T09:10+01:00,Łódź,krew,AB-,high,,100
