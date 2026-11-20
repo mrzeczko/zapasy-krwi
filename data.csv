@@ -568,3 +568,14 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-20T12:11+01:00,Warszawa,plytki,B-,,50,50
 2026-11-20T12:11+01:00,Warszawa,plytki,B+,,100,100
 2026-11-20T12:11+01:00,Warszawa,plytki,AB-,,50,50
+2026-11-20T14:10+01:00,Katowice,krew,0-,,27,27
+2026-11-20T14:10+01:00,Katowice,krew,A-,,62,62
+2026-11-20T14:10+01:00,Katowice,krew,A+,,100,100
+2026-11-20T14:10+01:00,Katowice,krew,B-,,50,50
+2026-11-20T14:10+01:00,Katowice,krew,AB-,,28,28
+2026-11-20T14:10+01:00,Kielce,krew,0+,medium,,50
+2026-11-20T14:10+01:00,Kielce,krew,A+,medium,,50
+2026-11-20T14:10+01:00,Kielce,krew,AB+,sufficient,,75
+2026-11-20T14:10+01:00,Radom,krew,0-,medium,,50
+2026-11-20T14:10+01:00,Radom,krew,A-,low,,30
+2026-11-20T14:10+01:00,Radom,krew,B+,high,,100
