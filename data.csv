@@ -630,3 +630,6 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-23T13:10+01:00,Warszawa,plytki,AB+,,20,20
 2026-11-23T14:10+01:00,Kielce,krew,B+,sufficient,,75
 2026-11-23T14:10+01:00,Łódź,krew,A+,stopped,,
+2026-11-23T15:10+01:00,Wrocław,krew,0-,low,,30
+2026-11-23T15:10+01:00,Wrocław,krew,A+,sufficient,,75
+2026-11-23T15:10+01:00,Wrocław,krew,B+,high,,100
