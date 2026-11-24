@@ -655,3 +655,8 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-24T10:10+01:00,Poznań,krew,A+,high,,100
 2026-11-24T10:10+01:00,Poznań,krew,B-,high,,100
 2026-11-24T10:10+01:00,Poznań,krew,B+,high,,100
+2026-11-24T11:10+01:00,Lublin,krew,0-,low,,30
+2026-11-24T11:10+01:00,Lublin,krew,A-,medium,,50
+2026-11-24T11:10+01:00,Lublin,krew,A+,high,,100
+2026-11-24T11:10+01:00,Lublin,krew,B-,medium,,50
+2026-11-24T11:10+01:00,Racibórz,krew,A+,medium,,50
