@@ -665,3 +665,17 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-24T12:10+01:00,Warszawa,plytki,A-,,100,100
 2026-11-24T12:10+01:00,Warszawa,plytki,B-,,20,20
 2026-11-24T12:10+01:00,Warszawa,plytki,AB+,,50,50
+2026-11-24T13:10+01:00,Poznań,krew,0-,low,,30
+2026-11-24T13:10+01:00,Poznań,krew,A-,low,,30
+2026-11-24T13:10+01:00,Poznań,krew,B-,critical,,10
+2026-11-24T13:10+01:00,Radom,krew,0-,medium,,50
+2026-11-24T13:10+01:00,Radom,krew,0+,medium,,50
+2026-11-24T13:10+01:00,Radom,krew,A-,medium,,50
+2026-11-24T13:10+01:00,Radom,krew,A+,high,,100
+2026-11-24T13:10+01:00,Radom,krew,B-,low,,30
+2026-11-24T13:10+01:00,Centrum MSWiA,krew,A-,medium,,50
+2026-11-24T13:10+01:00,Centrum MSWiA,krew,A+,sufficient,,75
+2026-11-24T13:10+01:00,Centrum MSWiA,krew,B-,sufficient,,75
+2026-11-24T13:10+01:00,Centrum MSWiA,krew,B+,critical,,10
+2026-11-24T13:10+01:00,Centrum MSWiA,krew,AB-,sufficient,,75
+2026-11-24T13:10+01:00,Centrum MSWiA,krew,AB+,critical,,10
