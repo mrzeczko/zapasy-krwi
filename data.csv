@@ -713,3 +713,7 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-25T10:10+01:00,Radom,krew,0-,low,,30
 2026-11-25T10:10+01:00,Radom,krew,0+,low,,30
 2026-11-25T10:10+01:00,Radom,krew,A-,low,,30
+2026-11-25T11:10+01:00,Łódź,krew,AB+,medium,,50
+2026-11-25T11:10+01:00,Poznań,krew,A+,medium,,50
+2026-11-25T11:10+01:00,Racibórz,krew,0-,medium,,50
+2026-11-25T11:10+01:00,Racibórz,krew,A-,low,,30
