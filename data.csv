@@ -738,3 +738,5 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-26T08:10+01:00,Lublin,krew,B-,medium,,50
 2026-11-26T08:10+01:00,Łódź,krew,0-,medium,,50
 2026-11-26T08:10+01:00,Racibórz,krew,0+,medium,,50
+2026-11-26T09:10+01:00,Racibórz,krew,0+,low,,30
+2026-11-26T09:10+01:00,Racibórz,krew,B+,low,,30
