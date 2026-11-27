@@ -763,3 +763,6 @@ czas,centrum,typ,grupa,poziom,procent,wartosc
 2026-11-26T12:10+01:00,Warszawa,plytki,B+,,20,20
 2026-11-26T12:10+01:00,Warszawa,plytki,AB+,,100,100
 2026-11-26T14:07+01:00,Kielce,krew,A-,medium,,50
+2026-11-27T06:10+01:00,Warszawa,krew,AB-,,5,5
+2026-11-27T06:10+01:00,Warszawa,plytki,A-,,50,50
+2026-11-27T06:10+01:00,Warszawa,plytki,A+,,5,5
